@@ -1,3 +1,4 @@
+// CardComponent.js
 import React, { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -42,6 +43,7 @@ const CardComponent = () => {
         const data = await response.json();
         const { loc } = data;
         const [latitude, longitude] = loc.split(',');
+
         setLat(latitude);
         setLong(longitude);
       } else {
@@ -51,6 +53,12 @@ const CardComponent = () => {
       setError('An error occurred');
     }
   };
+
+  useEffect(() => {
+    if (ipaddress) {
+      fetchLocation(ipaddress);
+    }
+  }, [ipaddress]);
 
   const Content = (
     <Box
@@ -110,17 +118,24 @@ const CardComponent = () => {
           </Button>
         </Box>
 
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          {lat && long ? <Map lat={lat} long={long} /> : <p>Loading map...</p>}
-        </Box>
+          <Box
+          sx={{width:'100%',bgcolor:'red'}}
+          
+          >
+            <h1>Hello</h1>
+
+          </Box>
+
+           {/* Only render Map when lat and long are valid */}
+        {/* {lat && long ? (
+          <Map lat={lat} long={long} />
+        ) : (
+          <Typography sx={{ textAlign: 'center', mt: 2 }}>Loading map...</Typography>
+        )} */}
       </CardContent>
     </Card>
+
+   
   );
 };
 
