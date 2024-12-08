@@ -12,6 +12,8 @@ const CardComponent = () => {
   const [ipaddress, setIpaddress] = useState('');
   const [error, setError] = useState('');
 
+  const [location , setLocation] = useState('');
+
   const isValidIP = (ip) => {
     const cleanedIp = ip.trim();
     const regex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
@@ -43,6 +45,8 @@ const CardComponent = () => {
         const data = await response.json();
         const { loc } = data;
         const [latitude, longitude] = loc.split(',');
+
+        setLocation(data);
 
         setLat(latitude);
         setLong(longitude);
@@ -83,7 +87,7 @@ const CardComponent = () => {
   return (
     <Card
       sx={{
-        maxWidth: 600,
+        maxWidth: 1200,
         width: '100%',
         p: 2,
         display: 'flex',
@@ -118,20 +122,37 @@ const CardComponent = () => {
           </Button>
         </Box>
 
+        <Box
+        sx={{display:'flex',flex:'1',flexDirection:'column',alignItems:'center',my:5,gap:2}}
+        >
+          <p>IP Address: {location.ip}</p>
+          <p>Location: {location.city}, {location.region}, {location.country}</p>
+          <p>Organization: {location.org}</p>
+
+        </Box>
+
           <Box
-          sx={{width:'100%',bgcolor:'red'}}
+          sx={{ width: '700px', 
+            height: '500px',         
+            margin: '0 auto', // Optional: centers the box horizontally
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center', // Centers content vertically and horizontally
+            padding: 2, // Optional: Adds padding inside the box
+            }}
           
           >
-            <h1>Hello</h1>
+              {/* Only render Map when lat and long are valid */}
+                {lat && long ? (
+                <Map lat={lat} long={long} />
+                ) : (
+                <Typography sx={{ textAlign: 'center', mt: 2 }}>Loading map...</Typography>
+                )}
 
           </Box>
 
-           {/* Only render Map when lat and long are valid */}
-        {/* {lat && long ? (
-          <Map lat={lat} long={long} />
-        ) : (
-          <Typography sx={{ textAlign: 'center', mt: 2 }}>Loading map...</Typography>
-        )} */}
+         
       </CardContent>
     </Card>
 
